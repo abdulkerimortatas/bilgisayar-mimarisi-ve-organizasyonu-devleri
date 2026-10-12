@@ -1,2 +1,2 @@
-# bilgisayar-mimarisi-ve-organizasyonu-devleri
+# bilgisayar-mimarisi-ve-organizasyonu-Odevleri
 haftalık ödevler buraya yüklenecek.
