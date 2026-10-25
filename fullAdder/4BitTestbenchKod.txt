@@ -1,0 +1,41 @@
+// 4-Bit Toplayıcı Testbench
+module tb_full_adder_4bit;
+    logic [3:0] a;
+    logic [3:0] b;
+    logic cin;
+    logic [3:0] s;
+    logic cout;
+
+    // Modülü bağlama (Instantiation)
+    full_adder_4bit uut (
+        .a(a),
+        .b(b),
+        .cin(cin),
+        .s(s),
+        .cout(cout)
+    );
+
+    initial begin
+        // Simülasyon dalgalarını (waveform) izleyebilmek için
+        $dumpfile("dump.vcd");
+        $dumpvars(1, tb_full_adder_4bit);
+
+        // Test Senaryoları
+        // Örnek 1: A = 9 (1001), B = 5 (0101), Cin = 0 -> Beklenen Toplam: 14 (1110), Cout = 0
+        a = 4'b1001; b = 4'b0101; cin = 1'b0;
+        #10;
+        $display("A = %b, B = %b, Cin = %b | Toplam (S) = %b, Elde (Cout) = %b", a, b, cin, s, cout);
+
+        // Örnek 2: A = 7 (0111), B = 8 (1000), Cin = 0 -> Beklenen Toplam: 15 (1111), Cout = 0
+        a = 4'b0111; b = 4'b1000; cin = 1'b0;
+        #10;
+        $display("A = %b, B = %b, Cin = %b | Toplam (S) = %b, Elde (Cout) = %b", a, b, cin, s, cout);
+
+        // Örnek 3: Taşma (Overflow) Testi -> A = 15 (1111), B = 1 (0001), Cin = 0 -> Beklenen Toplam: 0 (0000), Cout = 1
+        a = 4'b1111; b = 4'b0001; cin = 1'b0;
+        #10;
+        $display("A = %b, B = %b, Cin = %b | Toplam (S) = %b, Elde (Cout) = %b", a, b, cin, s, cout);
+
+        $finish;
+    end
+endmodule

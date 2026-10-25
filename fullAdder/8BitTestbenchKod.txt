@@ -1,0 +1,33 @@
+module tb_full_adder_8bit;
+    logic [7:0] a;
+    logic [7:0] b;
+    logic cin;
+    logic [7:0] s;
+    logic cout;
+
+    // Modülü bağlama (8-bit)
+    full_adder_8bit uut (
+        .a(a),
+        .b(b),
+        .cin(cin),
+        .s(s),
+        .cout(cout)
+    );
+
+    initial begin
+        $dumpfile("dump.vcd");
+        $dumpvars(1, tb_full_adder_8bit);
+
+        // Örnek 1: A = 150 (10010110), B = 100 (01100100)
+        a = 8'b10010110; b = 8'b01100100; cin = 1'b0;
+        #10;
+        $display("A = %b, B = %b | Toplam (S) = %b, Elde (Cout) = %b", a, b, s, cout);
+
+        // Örnek 2: Maksimum Değer Testi -> A = 255 (11111111), B = 1 (00000001)
+        a = 8'b11111111; b = 8'b00000001; cin = 1'b0;
+        #10;
+        $display("A = %b, B = %b | Toplam (S) = %b, Elde (Cout) = %b", a, b, s, cout);
+
+        $finish;
+    end
+endmodule
