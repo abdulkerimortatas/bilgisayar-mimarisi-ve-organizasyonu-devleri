@@ -1,0 +1,70 @@
+`timescale 1ns / 1ps
+
+module tb_alu_4bit;
+
+    // Testbench sinyalleri (Tasarım girişleri reg, çıkışları wire olur)
+    reg [3:0] A;
+    reg [3:0] B;
+    reg [1:0] ALU_Sel;
+    wire [7:0] ALU_Out;
+
+    // Test edilecek modülün (UUT - Unit Under Test) çağrılması
+    alu_4bit uut (
+        .A(A), 
+        .B(B), 
+        .ALU_Sel(ALU_Sel), 
+        .ALU_Out(ALU_Out)
+    );
+
+    initial begin
+        // Konsol ekranında takibi kolaylaştırmak için format ayarı
+        $monitor("Zaman=%0dns | Seçim=%b | A=%d | B=%d | Sonuç=%d", $time, ALU_Sel, A, B, ALU_Out);
+
+        // Başlangıç değerleri
+        A = 4'd0;
+        B = 4'd0;
+        ALU_Sel = 2'b00;
+        #10;
+
+        // ---- TEST 1: TOPLAMA (ALU_Sel = 00) ----
+        ALU_Sel = 2'b00;
+        A = 4'd5;
+        B = 4'd3;
+        #10; // Beklenen Sonuç: 8
+
+        A = 4'd12;
+        B = 4'd7;
+        #10; // Beklenen Sonuç: 19
+
+        // ---- TEST 2: ÇIKARMA (ALU_Sel = 01) ----
+        ALU_Sel = 2'b01;
+        A = 4'd10;
+        B = 4'd4;
+        #10; // Beklenen Sonuç: 6
+
+        // ---- TEST 3: ÇARPMA (ALU_Sel = 10) ----
+        ALU_Sel = 2'b10;
+        A = 4'd4;
+        B = 4'd5;
+        #10; // Beklenen Sonuç: 20
+
+        A = 4'd15; // Maksimum 4-bit değer
+        B = 4'd15; // Maksimum 4-bit değer
+        #10; // Beklenen Sonuç: 225 (8-bit çıkış sayesinde taşma olmaz)
+
+        // ---- TEST 4: BÖLME (ALU_Sel = 11) ----
+        ALU_Sel = 2'b11;
+        A = 4'd12;
+        B = 4'd3;
+        #10; // Beklenen Sonuç: 4
+
+        // ---- TEST 5: SIFIRA BÖLME KONTROLÜ ----
+        A = 4'd8;
+        B = 4'd0;
+        #10; // Beklenen Sonuç: 0 (Hata koruması devrede)
+
+        // Simülasyonu sonlandır
+        $finish;
+    end
+
+endmodule
